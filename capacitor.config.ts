@@ -5,7 +5,6 @@ const config: CapacitorConfig = {
   appName: 'alert-firearm-guard',
   webDir: 'dist',
   server: {
-    url: 'https://b0d8b544-ceb3-4685-937b-d869d281e2ea.lovableproject.com?forceHideBadge=true',
     cleartext: true
   },
   plugins: {
