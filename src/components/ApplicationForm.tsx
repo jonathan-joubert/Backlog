@@ -39,7 +39,7 @@ const isValidSouthAfricanID = (id: string): boolean => {
 };
 
 interface ApplicationFormProps {
-  onApplicationAdded: (application: FirearmApplication) => void;
+  onApplicationAdded: (application: FirearmApplication) => Promise<void>;
 }
 
 export const ApplicationForm: React.FC<ApplicationFormProps> = ({ onApplicationAdded }) => {
@@ -188,7 +188,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ onApplicationA
     
     try {
       const newApplication = addApplication(formData);
-      onApplicationAdded(newApplication);
+      await onApplicationAdded(newApplication);
       
       // Reset form
       setFormData({

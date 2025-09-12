@@ -75,7 +75,7 @@ const DeleteConfirmDialog: React.FC<{
 
 interface ApplicationListProps {
   applications: FirearmApplication[];
-  onApplicationDeleted: (id: string) => void;
+  onApplicationDeleted: (id: string) => Promise<void>;
   onApplicationEdit: (application: FirearmApplication) => void;
 }
 
@@ -96,12 +96,12 @@ export const ApplicationList: React.FC<ApplicationListProps> = ({
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
   if (!selectedApp) return;
 
   const success = deleteApplication(selectedApp.id);
   if (success) {
-    onApplicationDeleted(selectedApp.id);
+    await onApplicationDeleted(selectedApp.id);
     toast({
       title: "Success",
       description: "Application deleted successfully",

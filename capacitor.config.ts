@@ -1,11 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.firearmtracker.app',
-  appName: 'firearm-application-tracker',
+  appId: 'app.lovable.b0d8b544ceb34685937bd869d281e2ea',
+  appName: 'alert-firearm-guard',
   webDir: 'dist',
   server: {
-    androidScheme: 'https'
+    url: 'https://b0d8b544-ceb3-4685-937b-d869d281e2ea.lovableproject.com?forceHideBadge=true',
+    cleartext: true
   },
   plugins: {
     LocalNotifications: {

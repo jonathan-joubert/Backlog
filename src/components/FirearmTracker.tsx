@@ -309,7 +309,7 @@ useEffect(() => {
   }
 
   // Initialize notifications
-  initializeNotifications(loadedFirearms);
+  initializeNotifications(loadedFirearms, loadedApplications);
 }, []);
 
   // Calculate renewal status and color
@@ -343,13 +343,30 @@ const getRenewalStatus = (expiryDate: string) => {
 };
 
   // Handle new application added
-  const handleApplicationAdded = (application: FirearmApplication) => {
-    setApplications(prev => [...prev, application]);
+  const handleApplicationAdded = async (application: FirearmApplication) => {
+    const newApplications = [...applications, application];
+    setApplications(newApplications);
+    
+    // Reschedule application notifications
+    try {
+      await notificationService.scheduleApplicationNotifications(newApplications);
+    } catch (error) {
+      console.error('Failed to schedule application notifications:', error);
+    }
   };
 
   // Handle application deletion
-  const handleApplicationDeleted = (id: string) => {
-    setApplications(prev => prev.filter(app => app.id !== id));
+  const handleApplicationDeleted = async (id: string) => {
+    const updatedApplications = applications.filter(app => app.id !== id);
+    setApplications(updatedApplications);
+    
+    // Cancel notification for deleted application and reschedule others
+    try {
+      await notificationService.cancelApplicationNotification(id);
+      await notificationService.scheduleApplicationNotifications(updatedApplications);
+    } catch (error) {
+      console.error('Failed to update application notifications:', error);
+    }
   };
 
   // Handle application edit
@@ -359,12 +376,18 @@ const getRenewalStatus = (expiryDate: string) => {
   };
 
   // Handle application update
-  const handleApplicationUpdated = (updatedApplication: FirearmApplication) => {
-    setApplications(prev => 
-      prev.map(app => 
-        app.id === updatedApplication.id ? updatedApplication : app
-      )
+  const handleApplicationUpdated = async (updatedApplication: FirearmApplication) => {
+    const updatedApplications = applications.map(app => 
+      app.id === updatedApplication.id ? updatedApplication : app
     );
+    setApplications(updatedApplications);
+    
+    // Reschedule application notifications
+    try {
+      await notificationService.scheduleApplicationNotifications(updatedApplications);
+    } catch (error) {
+      console.error('Failed to reschedule application notifications:', error);
+    }
   };
 
   
@@ -486,10 +509,14 @@ const confirmFirearmDelete = () => {
   }
 };
 
-// Initialize notifications on app start
-const initializeNotifications = async (loadedFirearms: FirearmRecord[]) => {
+  // Initialize notifications on app start
+const initializeNotifications = async (loadedFirearms: FirearmRecord[], loadedApplications: FirearmApplication[]) => {
   try {
-    await notificationService.initialize();
+    const initialized = await notificationService.initialize();
+    if (!initialized) {
+      console.log('Notifications not available or permission denied');
+      return;
+    }
     
     // Load notification settings and reschedule active notifications
     const settings = loadNotificationSettings();
@@ -499,6 +526,9 @@ const initializeNotifications = async (loadedFirearms: FirearmRecord[]) => {
         await notificationService.scheduleFirearmNotifications(firearm);
       }
     }
+
+    // Schedule application notifications for pending applications
+    await notificationService.scheduleApplicationNotifications(loadedApplications);
   } catch (error) {
     console.error('Failed to initialize notifications:', error);
   }
@@ -570,7 +600,7 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="applications" className="mb-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="applications" className="flex items-center gap-2">
             <FileText className="w-4 h-4" />
             Applications
@@ -578,10 +608,6 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
           <TabsTrigger value="firearm-status" className="flex items-center gap-2">
             <Target className="w-4 h-4" />
             Firearms
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
-            <Bell className="w-4 h-4" />
-            Notifications
           </TabsTrigger>
           <TabsTrigger value="process" className="flex items-center gap-2">
             <ListOrdered className="w-4 h-4" />
@@ -605,12 +631,6 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
             />
           </TabsContent>
 
-          <TabsContent value="notifications">
-          <NotificationSettings
-            firearms={firearms}
-            onFirearmNotificationToggle={handleFirearmNotificationToggle}
-          />
-        </TabsContent>
 
           <TabsContent value="process">
             <div className="space-y-6">
@@ -819,18 +839,27 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                   </a>
                   <br />
                   
-                  <p>
-                    <strong>Stripe:</strong> <span> </span>
-                    <a
-                      href='https://buymeacoffee.com/jonathan.joubert'
-                      target='_blank'
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
-                    >
-                      Buy me a coffee
-                    </a>
-                  </p>
-                </p>
+                   <p>
+                     <strong>Stripe:</strong> <span> </span>
+                     <a
+                       href='https://buymeacoffee.com/jonathan.joubert'
+                       target='_blank'
+                       rel="noopener noreferrer"
+                       className="text-blue-500 hover:underline"
+                     >
+                       Buy me a coffee
+                     </a>
+                   </p>
+                   
+                   <p className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                     <strong className="text-blue-800 dark:text-blue-200">🔥 FirearmPro.org.za:</strong>{" "}
+                     <span className="text-blue-700 dark:text-blue-300">
+                       Looking for more professional firearm tools and services? 
+                       Visit <a href="https://firearmpro.org.za" target="_blank" rel="noopener noreferrer" className="underline font-semibold">FirearmPro.org.za</a> for 
+                       advanced features, compliance tools, and expert services designed specifically for South Africa's firearm community.
+                     </span>
+                   </p>
+                 </p>
               </div>
             </CardContent>
           </Card>
@@ -1025,6 +1054,14 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                   </CardContent>
                 </Card>
               )}
+
+              {/* Notification Settings under Firearms */}
+              <div className="mt-6">
+                <NotificationSettings
+                  firearms={firearms}
+                  onFirearmNotificationToggle={handleFirearmNotificationToggle}
+                />
+              </div>
             </div>
           </TabsContent>
         </Tabs>

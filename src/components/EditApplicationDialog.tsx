@@ -41,7 +41,7 @@ interface EditApplicationDialogProps {
   application: FirearmApplication | null;
   isOpen: boolean;
   onClose: () => void;
-  onApplicationUpdated: (application: FirearmApplication) => void;
+  onApplicationUpdated: (application: FirearmApplication) => Promise<void>;
 }
 
 export const EditApplicationDialog: React.FC<EditApplicationDialogProps> = ({
@@ -142,7 +142,7 @@ export const EditApplicationDialog: React.FC<EditApplicationDialogProps> = ({
           ...formData,
         };
         
-        onApplicationUpdated(updatedApplication);
+        await onApplicationUpdated(updatedApplication);
         onClose();
         
         toast({

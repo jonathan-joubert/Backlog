@@ -1,7 +1,8 @@
 // services/notificationService.ts
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
-import { FirearmRecord } from '@/types/firearm';
+import { FirearmRecord, FirearmApplication } from '@/types/firearm';
+import { calculateWorkingDays } from '@/utils/holidays';
 
 export interface NotificationSchedule {
   firearmId: string;
@@ -10,9 +11,16 @@ export interface NotificationSchedule {
   notificationIds: number[];
 }
 
+export interface ApplicationNotificationSchedule {
+  applicationId: string;
+  applicationRef: string;
+  notificationId: number;
+}
+
 class NotificationService {
   private notificationCounter = 1000; // Start from 1000 to avoid conflicts
   private scheduleKey = 'firearm_notification_schedule';
+  private applicationScheduleKey = 'application_notification_schedule';
 
   async initialize(): Promise<boolean> {
     if (!Capacitor.isNativePlatform()) {
@@ -230,6 +238,133 @@ class NotificationService {
     } catch (error) {
       console.error('Failed to get pending notifications:', error);
       return [];
+    }
+  }
+
+  // Application notification methods
+  private saveApplicationSchedule(schedule: ApplicationNotificationSchedule[]): void {
+    try {
+      localStorage.setItem(this.applicationScheduleKey, JSON.stringify(schedule));
+    } catch (error) {
+      console.error('Failed to save application notification schedule:', error);
+    }
+  }
+
+  private loadApplicationSchedule(): ApplicationNotificationSchedule[] {
+    try {
+      const stored = localStorage.getItem(this.applicationScheduleKey);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Failed to load application notification schedule:', error);
+      return [];
+    }
+  }
+
+  async scheduleApplicationNotifications(applications: FirearmApplication[]): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    try {
+      // Cancel all existing application notifications
+      await this.cancelAllApplicationNotifications();
+
+      const notifications: LocalNotificationSchema[] = [];
+      const schedule: ApplicationNotificationSchedule[] = [];
+
+      for (const app of applications) {
+        const applicationDate = new Date(app.dateApplied);
+        const today = new Date();
+        const workingDaysPending = calculateWorkingDays(applicationDate, today);
+        
+        // Schedule notification for applications that are approaching or past 90 working days
+        if (workingDaysPending >= 88) {
+          // For applications that are already at 90+ days, schedule immediate notification
+          const notificationDate = workingDaysPending >= 90 ? new Date(Date.now() + 60000) : // 1 minute from now
+            new Date(Date.now() + (92 - workingDaysPending) * 24 * 60 * 60 * 1000); // Schedule for when it hits 90 days
+          
+          const id = this.getNextNotificationId();
+          
+          const daysText = workingDaysPending >= 90 ? 
+            `${workingDaysPending} working days` : 
+            '90+ working days';
+            
+          notifications.push({
+            id,
+            title: 'Application Pending Alert',
+            body: `Your firearm application ${app.applicationRefNumber} has been pending for ${daysText}. Consider following up with SAPS.`,
+            schedule: {
+              at: notificationDate,
+            },
+            sound: undefined,
+            attachments: undefined,
+            actionTypeId: '',
+            extra: {
+              applicationId: app.id,
+              type: 'application_pending',
+              workingDays: workingDaysPending
+            }
+          });
+
+          schedule.push({
+            applicationId: app.id,
+            applicationRef: app.applicationRefNumber,
+            notificationId: id
+          });
+        }
+      }
+
+      if (notifications.length > 0) {
+        await LocalNotifications.schedule({
+          notifications
+        });
+        this.saveApplicationSchedule(schedule);
+        console.log(`Scheduled ${notifications.length} application pending notifications`);
+      }
+    } catch (error) {
+      console.error('Failed to schedule application notifications:', error);
+    }
+  }
+
+  async cancelAllApplicationNotifications(): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    try {
+      const schedule = this.loadApplicationSchedule();
+      const allIds = schedule.map(s => s.notificationId);
+
+      if (allIds.length > 0) {
+        await LocalNotifications.cancel({
+          notifications: allIds.map(id => ({ id }))
+        });
+      }
+
+      // Clear the schedule
+      this.saveApplicationSchedule([]);
+      console.log(`Cancelled ${allIds.length} application notifications`);
+    } catch (error) {
+      console.error('Failed to cancel application notifications:', error);
+    }
+  }
+
+  async cancelApplicationNotification(applicationId: string): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    try {
+      const schedule = this.loadApplicationSchedule();
+      const applicationSchedule = schedule.find(s => s.applicationId === applicationId);
+      
+      if (applicationSchedule) {
+        await LocalNotifications.cancel({
+          notifications: [{ id: applicationSchedule.notificationId }]
+        });
+
+        // Remove from schedule
+        const updatedSchedule = schedule.filter(s => s.applicationId !== applicationId);
+        this.saveApplicationSchedule(updatedSchedule);
+        
+        console.log(`Cancelled application notification for ${applicationSchedule.applicationRef}`);
+      }
+    } catch (error) {
+      console.error('Failed to cancel application notification:', error);
     }
   }
 }
