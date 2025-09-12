@@ -251,29 +251,6 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
         </CardHeader>
         <CardContent className="p-4">
           <div className="space-y-4">
-            {/* Test Notification Button */}
-            <div className="p-3 bg-muted rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Test Notifications</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    await notificationService.scheduleTestNotification();
-                    toast({
-                      title: "Test notification scheduled",
-                      description: "You should receive a notification in 10 seconds",
-                    });
-                  }}
-                >
-                  Send Test
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Tap to send a test notification in 10 seconds to verify notifications work
-              </p>
-            </div>
-
             <div className="text-sm text-muted-foreground">
               <p>Receive push notifications before your firearm licenses expire.</p>
               <p className="mt-2">

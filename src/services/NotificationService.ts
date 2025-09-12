@@ -241,37 +241,6 @@ class NotificationService {
     }
   }
 
-  // Test notification function for debugging
-  async scheduleTestNotification(): Promise<void> {
-    if (!Capacitor.isNativePlatform()) return;
-
-    try {
-      const id = this.getNextNotificationId();
-      const testDate = new Date(Date.now() + 10000); // 10 seconds from now
-
-      await LocalNotifications.schedule({
-        notifications: [{
-          id,
-          title: 'Test Notification',
-          body: 'If you see this, notifications are working correctly!',
-          schedule: {
-            at: testDate,
-          },
-          sound: undefined,
-          attachments: undefined,
-          actionTypeId: '',
-          extra: {
-            type: 'test'
-          }
-        }]
-      });
-
-      console.log('Test notification scheduled for 10 seconds from now');
-    } catch (error) {
-      console.error('Failed to schedule test notification:', error);
-    }
-  }
-
   // Application notification methods
   private saveApplicationSchedule(schedule: ApplicationNotificationSchedule[]): void {
     try {
