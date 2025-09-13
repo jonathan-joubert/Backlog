@@ -12,6 +12,12 @@ export interface FirearmApplication {
   serialNumber?: string;
   gunReference?: string;
   title?: string;
+  // Extended properties for enhanced tracking
+  applicationType?: string;
+  currentStatus?: string;
+  workingDaysPending?: number;
+  cost?: number;
+  notes?: string;
 }
 
 export interface FirearmRecord {

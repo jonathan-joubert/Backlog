@@ -11,6 +11,9 @@ import { FirearmApplication, AppSettings, FirearmRecord } from '@/types/firearm'
 import { loadApplications, loadSettings, saveSettings, loadFirearms, addFirearm, deleteFirearm, updateFirearm } from '@/utils/storage';
 import { Shield, FileText, ListOrdered, Info, Target, Pencil, AlertTriangle, Trash2 } from 'lucide-react';
 import { ProcessDefinitionButton } from './ProcessDefinitions';
+import { QuickStats } from './QuickStats';
+import { CostTracker } from './CostTracker';
+import { AdvancedSearch } from './AdvancedSearch';
 import { ServerStatus } from './ServerStatus';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -271,6 +274,7 @@ const DeleteConfirmDialog: React.FC<{
 export const FirearmTracker: React.FC = () => {
   const { toast } = useToast();
   const [applications, setApplications] = useState<FirearmApplication[]>([]);
+  const [filteredApplications, setFilteredApplications] = useState<FirearmApplication[]>([]);
   const [editingApplication, setEditingApplication] = useState<FirearmApplication | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [settings, setSettings] = useState<AppSettings>({ isDarkMode: false });
@@ -299,6 +303,7 @@ useEffect(() => {
   const loadedFirearms = loadFirearms();
   
   setApplications(loadedApplications);
+  setFilteredApplications(loadedApplications);
   setSettings(loadedSettings);
   setFirearms(loadedFirearms);
   
@@ -347,6 +352,7 @@ const getRenewalStatus = (expiryDate: string) => {
   const handleApplicationAdded = async (application: FirearmApplication) => {
     const newApplications = [...applications, application];
     setApplications(newApplications);
+    setFilteredApplications(newApplications);
     
     // Reschedule application notifications
     try {
@@ -360,6 +366,7 @@ const getRenewalStatus = (expiryDate: string) => {
   const handleApplicationDeleted = async (id: string) => {
     const updatedApplications = applications.filter(app => app.id !== id);
     setApplications(updatedApplications);
+    setFilteredApplications(updatedApplications);
     
     // Cancel notification for deleted application and reschedule others
     try {
@@ -381,6 +388,8 @@ const getRenewalStatus = (expiryDate: string) => {
     const updatedApplications = applications.map(app => 
       app.id === updatedApplication.id ? updatedApplication : app
     );
+    setApplications(updatedApplications);
+    setFilteredApplications(updatedApplications);
     setApplications(updatedApplications);
     
     // Reschedule application notifications
@@ -600,8 +609,12 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
         </Card>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="applications" className="mb-6">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
+        <Tabs defaultValue="dashboard" className="mb-6">
+          <TabsList className="grid w-full grid-cols-5 h-auto">
+          <TabsTrigger value="dashboard" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
+            <Shield className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">Dashboard</span>
+          </TabsTrigger>
           <TabsTrigger value="applications" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
             <FileText className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
             <span className="text-xs sm:text-sm truncate">Apps</span>
@@ -620,13 +633,22 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
           </TabsTrigger>
         </TabsList>
 
+          <TabsContent value="dashboard" className="space-y-6">
+            <QuickStats applications={applications} />
+            <CostTracker applications={applications} onUpdateApplication={handleApplicationUpdated} />
+            <AdvancedSearch 
+              applications={applications} 
+              onFilteredResults={setFilteredApplications} 
+            />
+          </TabsContent>
+
           <TabsContent value="applications" className="space-y-6">
             {/* Application Form */}
             <ApplicationForm onApplicationAdded={handleApplicationAdded} />
 
             {/* Applications List */}
             <ApplicationList
-              applications={applications}
+              applications={filteredApplications.length > 0 ? filteredApplications : applications}
               onApplicationDeleted={handleApplicationDeleted}
               onApplicationEdit={handleApplicationEdit}
             />
