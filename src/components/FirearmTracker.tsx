@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FirearmApplication, AppSettings, FirearmRecord } from '@/types/firearm';
 import { loadApplications, loadSettings, saveSettings, loadFirearms, addFirearm, deleteFirearm, updateFirearm } from '@/utils/storage';
 import { Shield, FileText, ListOrdered, Info, Target, Pencil, AlertTriangle, Trash2 } from 'lucide-react';
+import { ProcessDefinitionButton } from './ProcessDefinitions';
 import { ServerStatus } from './ServerStatus';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -653,27 +654,27 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                      DFO
+                      <ProcessDefinitionButton term="DFO">DFO</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">4</span>
-                      Provincial DFO
+                      <ProcessDefinitionButton term="Provincial DFO">Provincial DFO</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">5</span>
-                      CFR
+                      <ProcessDefinitionButton term="CFR">CFR</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">6</span>
-                      Competency Section
+                      <ProcessDefinitionButton term="Competency Section">Competency Section</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">7</span>
-                      CRC
+                      <ProcessDefinitionButton term="CRC">CRC</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">8</span>
-                      Consideration
+                      <ProcessDefinitionButton term="Consideration">Consideration</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs font-bold">9</span>
@@ -702,23 +703,23 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                      DFO
+                      <ProcessDefinitionButton term="DFO">DFO</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">4</span>
-                      Provincial DFO
+                      <ProcessDefinitionButton term="Provincial DFO">Provincial DFO</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">5</span>
-                      CFR
+                      <ProcessDefinitionButton term="CFR">CFR</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">6</span>
-                      Licensing Section
+                      <ProcessDefinitionButton term="Licensing Section">Licensing Section</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">7</span>
-                      Consideration
+                      <ProcessDefinitionButton term="Consideration">Consideration</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs font-bold">8</span>
@@ -747,7 +748,7 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                      In Process
+                      <ProcessDefinitionButton term="In Process">In Process</ProcessDefinitionButton>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
