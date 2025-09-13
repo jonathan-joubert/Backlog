@@ -154,27 +154,27 @@ export const ServerStatus: React.FC = () => {
   const status = getStatusDisplay();
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between flex-wrap gap-2">
+      <div className="flex items-center gap-2 min-w-0">
         {status.icon}
         <Badge 
           variant={status.variant}
-          className={`text-sm font-semibold ${
+          className={`text-xs sm:text-sm font-semibold px-2 py-1 whitespace-nowrap ${
             isOnline ? 'bg-green-600 hover:bg-green-700' : 
             isOnline === false ? 'bg-red-600 hover:bg-red-700' : ''
           }`}
         >
-          {status.text}
+          <span className="truncate">{status.text}</span>
         </Badge>
         {/* Debug info - remove in production */}
         {checkMethod && (
-          <span className="text-xs text-muted-foreground ml-2">
+          <span className="text-xs text-muted-foreground ml-2 hidden sm:inline">
             ({checkMethod})
           </span>
         )}
       </div>
       {lastChecked && (
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">
           Last: {lastChecked.toLocaleTimeString([], { 
             hour: '2-digit', 
             minute: '2-digit' 

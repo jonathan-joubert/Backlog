@@ -600,22 +600,22 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="applications" className="mb-6">
-          <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="applications" className="flex items-center gap-2">
-            <FileText className="w-4 h-4" />
-            Applications
+          <TabsList className="grid w-full grid-cols-4 h-auto">
+          <TabsTrigger value="applications" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
+            <FileText className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">Apps</span>
           </TabsTrigger>
-          <TabsTrigger value="firearm-status" className="flex items-center gap-2">
-            <Target className="w-4 h-4" />
-            Firearms
+          <TabsTrigger value="firearm-status" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
+            <Target className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">Firearms</span>
           </TabsTrigger>
-          <TabsTrigger value="process" className="flex items-center gap-2">
-            <ListOrdered className="w-4 h-4" />
-            Process
+          <TabsTrigger value="process" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
+            <ListOrdered className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">Process</span>
           </TabsTrigger>
-          <TabsTrigger value="app-info" className="flex items-center gap-2">
-            <Info className="w-4 h-4" />
-            App Info
+          <TabsTrigger value="app-info" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2">
+            <Info className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">Info</span>
           </TabsTrigger>
         </TabsList>
 
