@@ -819,6 +819,15 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                   empower the local firearm community. This project was built to simplify 
                   application tracking and provide transparency.
                 </p>
+                  
+                  <p>
+                  <strong > Apple iOS availability:</strong>{" "}
+                     <span >
+                       An iOS version is planned for the near future.
+                       Publishing and maintaining apps on the Apple App Store involves significant hosting and licensing costs, and community support helps make this possible.
+                       </span>
+                       </p>
+
                 <p>
                   <strong>Support the Project: </strong>  
                    This app is free and developed for the community. If you’d like to 
@@ -852,13 +861,16 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                    </p>
                    
                    <p className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                     <strong className="text-blue-800 dark:text-blue-200">🔥 FirearmPro.org.za:</strong>{" "}
+                     <strong className="text-blue-800 dark:text-blue-200">🔥 firearmpro.org.za:</strong>{" "}
                      <span className="text-blue-700 dark:text-blue-300">
                        Looking for more professional firearm tools and services? 
-                       Visit <a href="https://firearmpro.org.za" target="_blank" rel="noopener noreferrer" className="underline font-semibold">FirearmPro.org.za</a> for 
+                       Visit <a href="https://firearmpro.org.za" target="_blank" rel="noopener noreferrer" className="underline font-semibold">firearmpro.org.za</a> for 
                        advanced features, compliance tools, and expert services designed specifically for South Africa's firearm community.
-                     </span>
+                     </span>         
+                       
                    </p>
+
+                   
                  </p>
               </div>
             </CardContent>

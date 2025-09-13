@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.b0d8b544ceb34685937bd869d281e2ea',
-  appName: 'alert-firearm-guard',
+  appId: 'com.jjoubert.backlog',
+  appName: 'backlog',
   webDir: 'dist',
   server: {
     cleartext: true
