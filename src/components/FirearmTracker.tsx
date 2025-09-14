@@ -23,6 +23,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { NotificationSettings } from './NotificationSettings';
 import { Bell } from 'lucide-react';
 import { notificationService } from '@/services/NotificationService';
+import { Browser } from '@capacitor/browser';
 
 
 /**
@@ -81,6 +82,9 @@ const EditFirearmDialog: React.FC<{
       });
     }
   }, [firearm]);
+
+
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -558,7 +562,9 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
   }
 };
 
-
+  const openPrivacyPolicy = async () => {
+      await Browser.open({ url: 'https://backlog.fibco.co.za/PrivacyPolicy.html' });
+    };
 
 
 
@@ -783,11 +789,23 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
                     <li>Manage firearm records and expiry dates</li>
                     <li>Dark/Light mode toggle</li>
                     <li>Offline storage</li>
-                  </ul>
-                  <p>
-                    <strong>Data Privacy:</strong> All data is stored locally on your device. 
-                    No information is sent to external servers except when checking application status.
-                  </p>
+                    </ul>
+                    <p>
+                      <strong>Data Privacy:</strong> All data is stored locally on your device, giving you full control. 
+                      No personal information is collected or shared with us or third parties, except for direct connections 
+                      you initiate to the official SAPS website when checking application status. 
+                      For full details, please read our:<br/> <span> </span>
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault(); // prevent default WebView navigation
+                          openPrivacyPolicy(); // open in Capacitor Browser
+                        }}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Privacy Policy
+                      </a>.
+                    </p>
                   <p>
                     <strong>Legal Notice:</strong> This app is not affiliated with SAPS. 
                     Status information is fetched from the official SAPS website.
@@ -1080,18 +1098,39 @@ const handleFirearmNotificationToggle = async (firearmId: string, enabled: boole
         </Tabs>
 
         {/* Footer Info */}
-        <Card className="mt-8 bg-muted/50">
-          <CardContent className="p-4 text-center">
-            <p className="text-xs text-muted-foreground">
-              This app fetches status from the official SAPS website.
-              <br />
-              Working days exclude weekends and SA public holidays.
-              <br />
-              By: <a href='https://jjoubert.fibco.co.za' target='_blank' className='underline'>Jonathan Joubert</a> — for South Africa’s firearm community 🇿🇦
-              
-            </p>
-          </CardContent>
-        </Card>
+<Card className="mt-8 bg-muted/50">
+  <CardContent className="p-4 text-center">
+    <p className="text-xs text-muted-foreground">
+      This app fetches status from the official SAPS website.
+      <br />
+      Working days exclude weekends and SA public holidays.
+      <br />
+      By:{" "}
+      <a
+        href="https://jjoubert.fibco.co.za"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline"
+      >
+        Jonathan Joubert
+      </a>{" "}
+      — for South Africa’s firearm community 🇿🇦
+      <br />
+        <a
+          href="#"
+          className="underline"
+          onClick={(e) => {
+            e.preventDefault(); // prevent default browser navigation
+            openPrivacyPolicy(); // open in Capacitor Browser
+          }}
+        >
+          Privacy Policy
+        </a>
+
+    </p>
+  </CardContent>
+</Card>
+
       </div>
 
       {/* Edit Dialog */}
