@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# Backlog
 
-## Project info
+**Backlog** is a free and open-source application designed to help South African firearm owners track their SAPS firearm license applications and renewal dates. All data is stored locally on your device, ensuring full privacy and security.
 
-**URL**: https://lovable.dev/projects/eb7b5bc2-5ccf-4648-877c-307d507aa77c
+---
 
-## How can I edit this code?
+## 🚀 Features
 
-There are several ways of editing your application.
+- Track firearm license applications and expiry dates  
+- Smart notifications for upcoming renewals  
+- Simple, intuitive interface  
+- 100% offline — no data leaves your device  
+- Ad-free experience  
+- Lightweight and fast  
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/eb7b5bc2-5ccf-4648-877c-307d507aa77c) and start prompting.
+## 🛠️ Installation
 
-Changes made via Lovable will be committed automatically to this repo.
+1. **Clone the repository:**  
+   ```bash
+   git clone https://github.com/yourusername/backlog.git
+   ```
 
-**Use your preferred IDE**
+2. **Navigate to the project folder:**  
+   ```bash
+   cd backlog
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3. **Install dependencies:**  
+   ```bash
+   npm install
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+4. **Start the development server:**  
+   ```bash
+   npm run dev
+   ```
 
-Follow these steps:
+   The app should now be accessible at **http://localhost:3000**.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🧩 Tech Stack
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **Frontend:** React + Vite  
+- **Styling:** Tailwind CSS  
+- **Storage:** LocalStorage / IndexedDB  
+- **Notifications:** Native browser notifications  
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 🤝 Contributing
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Contributions, bug reports, and feature requests are welcome!  
+Please open an issue or submit a pull request via GitHub.
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 👤 Author
 
-## What technologies are used for this project?
+**Jonathan Reece Joubert**  
+📧 Email: [jjoubert@fibco.co.za](mailto:jjoubert@fibco.co.za)
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📄 License
 
-## How can I deploy this project?
+This project is licensed under the **MIT License**.  
+You are free to use, modify, and distribute this software as long as the original license and copyright
+notice are included.
 
-Simply open [Lovable](https://lovable.dev/projects/eb7b5bc2-5ccf-4648-877c-307d507aa77c) and click on Share -> Publish.
+See the [LICENSE](LICENSE) file for details.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🔒 Privacy Notice
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Backlog does **not** collect, transmit, or store any personal data externally.  
+All application data is securely stored **locally on your device**.  
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+## ❤️ Acknowledgements
+
+Special thanks to the South African firearm community for inspiration and testing support.
